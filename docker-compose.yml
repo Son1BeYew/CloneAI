@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  backend:
+  server:
     build: ./Server
     container_name: cloneai-backend
     restart: always
@@ -12,9 +12,11 @@ services:
     environment:
       NODE_ENV: production
 
-  frontend:
+  client:
     build: ./Client
     container_name: cloneai-frontend
     restart: always
     ports:
       - "80:80"
+    depends_on:
+      - server
