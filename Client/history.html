@@ -387,7 +387,9 @@
         }
         // Verify token is still valid
         try {
-          const res = await fetch(API_CONFIG.protected());
+          const res = await fetch(API_CONFIG.protected(), {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
           if (!res.ok) {
             localStorage.removeItem('token');
             localStorage.removeItem('refreshToken');
