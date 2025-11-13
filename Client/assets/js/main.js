@@ -6,13 +6,16 @@ function initScrollAnimations() {
   const elementInView = (el, dividend = 1) => {
     const elementTop = el.getBoundingClientRect().top;
     return (
-      elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend
+      elementTop <=
+      (window.innerHeight || document.documentElement.clientHeight) / dividend
     );
   };
 
   const elementOutofView = (el) => {
     const elementTop = el.getBoundingClientRect().top;
-    return elementTop > (window.innerHeight || document.documentElement.clientHeight);
+    return (
+      elementTop > (window.innerHeight || document.documentElement.clientHeight)
+    );
   };
 
   const displayScrollElement = () => {
@@ -56,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (id === "header") checkAuth();
         if (id === "slider") initSlider();
-        
+
         initScrollAnimations();
       })
       .catch((err) => console.error("Không thể nạp " + file, err));
@@ -205,8 +208,6 @@ function checkAuth() {
   }
 `;
 
-
-
       document.head.appendChild(style);
 
       const trigger = document.getElementById("userTrigger");
@@ -261,8 +262,6 @@ async function redirectToGenImage() {
     window.location.href = "/login.html";
   }
 }
-
-
 
 function showLoginModalHome() {
   // Tạo modal nếu chưa có
