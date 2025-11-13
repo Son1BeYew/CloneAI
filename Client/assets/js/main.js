@@ -34,7 +34,6 @@ function initScrollAnimations() {
 
 document.addEventListener("DOMContentLoaded", () => {
   const componentCSS = {
-    header: "/assets/css/header.css",
     hero: "/assets/css/hero.css",
     features: "/assets/css/features.css",
     footer: "/assets/css/footer.css",
