@@ -482,6 +482,27 @@
     <script src="/assets/js/auth-utils.js"></script>
     <script src="/assets/js/main.js"></script>
     <script>
+      // Check token on page load
+      window.addEventListener('DOMContentLoaded', async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          window.location.href = '/login.html';
+          return;
+        }
+        // Verify token is still valid
+        try {
+          const res = await fetch(API_CONFIG.protected());
+          if (!res.ok) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
+            window.location.href = '/login.html';
+          }
+        } catch (err) {
+          console.error('Token verification failed:', err);
+        }
+      });
+    </script>
+    <script>
       const amountInput = document.getElementById("amount-input");
       const topupBtn = document.getElementById("topup-btn");
       const amountBtns = document.querySelectorAll(".amount-btn");
