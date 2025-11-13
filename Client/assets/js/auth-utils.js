@@ -15,7 +15,6 @@ async function getValidAccessToken() {
     const now = Date.now();
     const timeLeft = expiresIn - now;
 
-    // Nếu token còn lại < 5 phút, refresh ngay
     if (timeLeft < 5 * 60 * 1000) {
       console.log("Access token expiring soon, refreshing...");
       const newToken = await refreshAccessToken(refreshToken);
@@ -30,11 +29,14 @@ async function getValidAccessToken() {
 
   return token;
 }
-
 // Function để refresh access token
 async function refreshAccessToken(refreshToken) {
   try {
-    const response = await fetch("/auth/refresh-token", {
+    const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:5000/auth/refresh-token'
+      : '/auth/refresh-token';
+    
+    const response = await fetch(apiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refreshToken }),

@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 const passport = require("passport");
 const path = require("path");
+const helmet = require("helmet");
 
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth");
@@ -18,20 +19,23 @@ const adminRoutes = require("./routes/admin");
 const outfitStyleRoutes = require("./routes/outfitStyles");
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+app.use(helmet());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "*",
+  credentials: true
+}));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 connectDB();
 
 require("./config/passport")(passport);
 app.use(passport.initialize());
 
-// Serve client static files
-app.use(express.static(path.join(__dirname, "../Client")));
+// Serve generated outputs
+app.use("/outputs", express.static(path.join(__dirname, "outputs")));
 
-// Serve admin folder explicitly
-app.use("/admin", express.static(path.join(__dirname, "../Client/admin")));
-
+// API Routes
 app.use("/auth", authRoutes);
 app.use("/protected", protectedRoutes);
 app.use("/api/ai", aiRoutes);
@@ -43,30 +47,19 @@ app.use("/api/topup", topupRoutes);
 app.use("/api/history", historyRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/outfit-styles", outfitStyleRoutes);
-app.use("/outputs", express.static(path.join(__dirname, "outputs")));
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../Client/index.html"));
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", message: "Server is running" });
 });
 
+// API 404 handler
 app.get("*", (req, res) => {
-  if (
-    req.path.startsWith("/auth") ||
-    req.path.startsWith("/protected") ||
-    req.path.startsWith("/api")
-  ) {
-    return res.status(404).json({ error: "Not found" });
-  }
-
-  if (req.path.startsWith("/admin")) {
-    return res.sendFile(path.join(__dirname, "../Client/admin/index.html"));
-  }
-
-  res.sendFile(path.join(__dirname, "../Client/index.html"));
+  res.status(404).json({ error: "API endpoint not found" });
 });
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on http://localhost:${PORT}`)
+app.listen(PORT, "0.0.0.0", () =>
+  console.log(`🚀 Server running on port ${PORT}`)
 );

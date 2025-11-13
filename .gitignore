@@ -1,4 +1,6 @@
 Server/.env
+Server/.env.local
+Server/.env.*.local
 Server/vertex-key.json
 Server/config/vertex-key.json
 Server/outputs/
@@ -6,3 +8,12 @@ Server/node_modules/
 Server/vertex-key.json
 node_modules/Server/config/vertex-ai-key.json
 Server/config/vertex-ai-key.json
+.env
+.env.local
+.env.*.local
+.DS_Store
+outputs/
+uploads/
+dist/
+build/
+*.log
