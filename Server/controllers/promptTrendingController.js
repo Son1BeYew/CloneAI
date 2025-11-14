@@ -11,7 +11,7 @@ cloudinary.config({
 // Tạo trending prompt với upload ảnh
 exports.createWithImage = async (req, res) => {
   try {
-    const { name, title, description, prompt, order } = req.body;
+    const { name, title, description, prompt, order, price } = req.body;
     
     if (!name || !title || !prompt) {
       return res.status(400).json({ message: "Các trường bắt buộc không được để trống" });
@@ -42,6 +42,7 @@ exports.createWithImage = async (req, res) => {
       prompt,
       image: imageUrl,
       order: order || 0,
+      price: price || 0,
     });
     
     res.status(201).json(newTrend);
@@ -55,9 +56,9 @@ exports.createWithImage = async (req, res) => {
 exports.updateWithImage = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, title, description, prompt, order } = req.body;
+    const { name, title, description, prompt, order, price } = req.body;
     
-    const updateData = { name, title, description, prompt, order };
+    const updateData = { name, title, description, prompt, order, price };
 
     if (req.file) {
       console.log("📤 Uploading image to Cloudinary:", req.file.filename);
@@ -118,7 +119,7 @@ exports.getById = async (req, res) => {
 // Tạo trending prompt mới (admin)
 exports.create = async (req, res) => {
   try {
-    const { name, title, description, prompt, image, order } = req.body;
+    const { name, title, description, prompt, image, order, price } = req.body;
     
     if (!name || !title || !prompt) {
       return res.status(400).json({ message: "Các trường bắt buộc không được để trống" });
@@ -131,6 +132,7 @@ exports.create = async (req, res) => {
       prompt,
       image,
       order: order || 0,
+      price: price || 0,
     });
     
     res.status(201).json(newTrend);

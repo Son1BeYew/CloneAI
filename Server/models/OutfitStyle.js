@@ -21,6 +21,11 @@ const outfitStyleSchema = new mongoose.Schema(
         isActive: { type: Boolean, default: true },
       },
     ],
+    price: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   { timestamps: true }
 );

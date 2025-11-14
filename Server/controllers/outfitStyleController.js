@@ -72,7 +72,7 @@ exports.getAllOutfitStyles = async (req, res) => {
 
 exports.createOutfitStyle = async (req, res) => {
   try {
-    const { gender, type, hairstyles } = req.body;
+    const { gender, type, hairstyles, price } = req.body;
 
     if (!gender || !["male", "female"].includes(gender)) {
       return res.status(400).json({ error: "Giới tính không hợp lệ (male hoặc female)" });
@@ -86,6 +86,7 @@ exports.createOutfitStyle = async (req, res) => {
       gender,
       type,
       hairstyles: hairstyles || [],
+      price: price || 0,
     });
 
     await outfitStyle.save();
@@ -107,11 +108,11 @@ exports.createOutfitStyle = async (req, res) => {
 exports.updateOutfitStyle = async (req, res) => {
   try {
     const { id } = req.params;
-    const { type, hairstyles } = req.body;
+    const { type, hairstyles, price } = req.body;
 
     const updated = await OutfitStyle.findByIdAndUpdate(
       id,
-      { type, hairstyles },
+      { type, hairstyles, price },
       { new: true }
     );
 

@@ -13,8 +13,16 @@ exports.getAllPrompts = async (req, res) => {
 // Tạo prompt mới
 exports.createPrompt = async (req, res) => {
   try {
-    const { name, title, description, prompt } = req.body;
-    const newPrompt = await Prompt.create({ name, title, description, prompt });
+    const { name, title, description, prompt, image, order, price } = req.body;
+    const newPrompt = await Prompt.create({ 
+      name, 
+      title, 
+      description, 
+      prompt,
+      image: image || "",
+      order: order || 0,
+      price: price || 0,
+    });
     res.status(201).json(newPrompt);
   } catch (error) {
     res.status(500).json({ message: "Lỗi khi tạo prompt", error });
