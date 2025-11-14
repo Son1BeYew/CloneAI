@@ -561,6 +561,11 @@
               <input type="number" id="promptOrder" value="0" min="0" />
             </div>
 
+            <div class="form-group">
+              <label for="promptPrice" class="required">Giá (VND)</label>
+              <input type="number" id="promptPrice" placeholder="0" value="0" min="0" required />
+            </div>
+
             <div class="form-group form-group-full">
               <label for="promptDescription">Mô Tả</label>
               <textarea
@@ -640,6 +645,7 @@
                 <th>Tên</th>
                 <th>Tiêu Đề</th>
                 <th style="width: 100px">Thứ Tự</th>
+                <th style="width: 120px">Giá (VND)</th>
                 <th style="width: 150px">Hành Động</th>
               </tr>
             </thead>
@@ -780,6 +786,7 @@
                     <td><span class="order-badge">${
                       prompt.order || 0
                     }</span></td>
+                    <td>${new Intl.NumberFormat('vi-VN').format(prompt.price || 0)}₫</td>
                     <td>
                         <div class="action-buttons">
                             <button class="btn-edit" onclick="editPrompt('${
@@ -816,6 +823,7 @@
                         <small style="color: #94a3b8;">Thứ tự: ${
                           prompt.order || 0
                         }</small>
+                        <small style="color: #667eea; font-weight: 600; display: block; margin-top: 5px;">Giá: ${new Intl.NumberFormat('vi-VN').format(prompt.price || 0)}₫</small>
                         <div class="card-actions" style="margin-top: 10px;">
                             <button class="btn btn-edit" onclick="editPrompt('${
                               prompt._id
@@ -862,6 +870,7 @@
           prompt.description || "";
         document.getElementById("promptText").value = prompt.prompt;
         document.getElementById("promptOrder").value = prompt.order || 0;
+        document.getElementById("promptPrice").value = prompt.price || 0;
 
         if (prompt.image) {
           const preview = document.getElementById("imagePreview");
@@ -910,6 +919,8 @@
         const promptText = document.getElementById("promptText").value;
         const promptOrder =
           parseInt(document.getElementById("promptOrder").value) || 0;
+        const promptPrice =
+          parseInt(document.getElementById("promptPrice").value) || 0;
         const promptImage = document.getElementById("promptImage").files[0];
 
         showLoading(true);
@@ -933,7 +944,8 @@
             title: promptTitle,
             description: promptDescription,
             prompt: promptText,
-            order: promptOrder
+            order: promptOrder,
+            price: promptPrice
           };
 
           if (promptImage) {
