@@ -25,6 +25,7 @@ exports.getMyProfile = async (req, res) => {
         phone: "",
         mangXaHoi: {},
         anhDaiDien: "",
+        balance: 0,
       });
 
       profile = await Profile.findOne({ userId })
@@ -35,7 +36,10 @@ exports.getMyProfile = async (req, res) => {
         .lean();
     }
 
-    // Đảm bảo dữ liệu trả về có userId dạng object (đã populate)
+    // Đảm bảo dữ liệu trả về có userId dạng object (đã populate) và balance
+    if (!profile.balance) {
+      profile.balance = 0;
+    }
     res.status(200).json(profile);
   } catch (error) {
     res.status(500).json({

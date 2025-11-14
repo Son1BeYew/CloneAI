@@ -238,7 +238,6 @@ body {
   );
   outline: none;
   transition: var(--transition-fast);
-  -webkit-appearance: none;
 }
 
 /* Range slider thumb styling */
@@ -1159,7 +1158,6 @@ body {
     var(--color-primary) 0%,
     var(--color-accent) 100%
   );
-  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

@@ -282,7 +282,19 @@
         `;
       }
 
-      function showSuccess(data) {
+      async function showSuccess(data) {
+        // Refresh profile để cập nhật balance
+        try {
+          const token = localStorage.getItem("token");
+          if (token) {
+            await fetch("/api/profile/me", {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+          }
+        } catch (err) {
+          console.log("Refresh profile:", err);
+        }
+
         resultContainer.innerHTML = `
           <div class="result-icon success">✓</div>
           <div class="result-title status-success">Nạp Tiền Thành Công!</div>
