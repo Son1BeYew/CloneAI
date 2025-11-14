@@ -35,6 +35,9 @@ app.use(passport.initialize());
 // Serve generated outputs
 app.use("/outputs", express.static(path.join(__dirname, "outputs")));
 
+// Serve Client static files
+app.use(express.static(path.join(__dirname, "../Client")));
+
 // API Routes
 app.use("/auth", authRoutes);
 app.use("/protected", protectedRoutes);

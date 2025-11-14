@@ -43,15 +43,15 @@ exports.register = async (req, res) => {
 
     const accessToken = signAccessToken(user);
     const refreshToken = signRefreshToken(user);
-    
+
     user.refreshToken = refreshToken;
     await user.save();
 
-    res.json({ 
-      message: "User registered successfully", 
-      accessToken, 
+    res.json({
+      message: "User registered successfully",
+      accessToken,
       refreshToken,
-      user 
+      user,
     });
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -59,20 +59,24 @@ exports.register = async (req, res) => {
 };
 
 exports.login = (req, res, next) => {
-  passport.authenticate("local", { session: false }, async (err, user, info) => {
-    if (err || !user)
-      return res.status(400).json({ error: info?.message || "Login failed" });
+  passport.authenticate(
+    "local",
+    { session: false },
+    async (err, user, info) => {
+      if (err || !user)
+        return res.status(400).json({ error: info?.message || "Login failed" });
 
-    console.log("✅ Login:", user.email, "Role:", user.role);
-    
-    const accessToken = signAccessToken(user);
-    const refreshToken = signRefreshToken(user);
-    
-    user.refreshToken = refreshToken;
-    await user.save();
-    
-    res.json({ accessToken, refreshToken, user });
-  })(req, res, next);
+      console.log("✅ Login:", user.email, "Role:", user.role);
+
+      const accessToken = signAccessToken(user);
+      const refreshToken = signRefreshToken(user);
+
+      user.refreshToken = refreshToken;
+      await user.save();
+
+      res.json({ accessToken, refreshToken, user });
+    }
+  )(req, res, next);
 };
 
 exports.googleCallback = async (req, res) => {
@@ -80,14 +84,14 @@ exports.googleCallback = async (req, res) => {
 
   const accessToken = signAccessToken(req.user);
   const refreshToken = signRefreshToken(req.user);
-  
+
   req.user.refreshToken = refreshToken;
   await req.user.save();
-  
+
   const role = (req.user?.role || "user").toLowerCase();
   const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
   const targetPath =
-    role === "admin" ? "/admin/index.html" : "/dashboard.html";
+    role === "admin" ? "/admin/index.html" : "Client/dashboard.html";
   const redirectUrl = new URL(targetPath, frontendUrl);
   redirectUrl.searchParams.set("token", accessToken);
   redirectUrl.searchParams.set("refreshToken", refreshToken);
